@@ -25,3 +25,13 @@ Thumbs.db
 kicad-libs/
 src/KiCad/
 
+dist-newstyle/
+*.hi
+*.o
+*.swp
+*.svg
+dist-newstyle/
+*.hi
+*.o
+*.swp
+*.svg
