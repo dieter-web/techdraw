@@ -1,0 +1,41 @@
+@startuml
+package TechDraw.Electrical {
+  class Electrical {
+    symbols : [Symbol]
+    wires   : [Wire]
+  }
+
+  class Symbol {
+    symType : SymbolType
+    symPos  : Point
+    symRot  : Double
+  }
+
+  enum SymbolType {
+    Resistor
+    Capacitor
+    Inductor
+    Switch
+    Fuse
+    Ground
+    Lamp
+    Diode
+    LED
+    ...
+  }
+
+  class Wire {
+    wirePoints : [Point]
+  }
+
+  class Render {
+    + renderElectrical()
+    + renderSymbol()
+    + renderWire()
+  }
+
+  class Library {
+    + renderSymbol()
+  }
+}
+@enduml

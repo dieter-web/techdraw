@@ -1,0 +1,9 @@
+module TechDraw.Electrical.Symbols.D_Zener_Dual_CommonAnode_KKA_Split where
+
+import TechDraw.SVG
+
+renderD_Zener_Dual_CommonAnode_KKA_Split :: Point -> SVG
+renderD_Zener_Dual_CommonAnode_KKA_Split (x,y) = Group
+  [
+
+  ]

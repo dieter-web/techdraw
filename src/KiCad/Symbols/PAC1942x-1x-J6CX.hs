@@ -1,0 +1,9 @@
+module TechDraw.Electrical.Symbols.PAC1942x-1x-J6CX where
+
+import TechDraw.SVG
+
+renderPAC1942x-1x-J6CX :: Point -> SVG
+renderPAC1942x-1x-J6CX (x,y) = Group
+  [
+
+  ]

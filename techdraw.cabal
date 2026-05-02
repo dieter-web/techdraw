@@ -1,0 +1,212 @@
+cabal-version:      2.2
+name:               techdraw
+version:            0.1.0.0
+build-type:        Custom
+
+custom-setup
+  setup-depends:
+    base,
+    Cabal,
+    aeson,
+    bytestring,
+    directory,
+    filepath,
+    megaparsec
+
+library
+  hs-source-dirs: src, generated
+  exposed-modules:
+      TechDraw
+      TechDraw.Pcb.Core
+      TechDraw.Pcb.DSL
+      TechDraw.Pcb.Types
+      TechDraw.Pcb.Units
+      TechDraw.Pcb.Utils
+      TechDraw.Pcb.Render
+
+      KiCad.Types
+      KiCad.SymbolGenerator
+      KiCad.Symbol
+      KiCad.SExprParser
+      KiCad.Footprint
+
+      TechDraw.SVG
+      TechDraw.SVG.Types
+      TechDraw.SVG.Defaults
+      TechDraw.SVG.Render
+      TechDraw.SVG.Matrix
+      TechDraw.SVG.BoundingBox
+      TechDraw.SVG.Center
+
+      --TechDraw.SVG.SVGRender
+      TechDraw.SVG.Path
+      TechDraw.SVG.Path.Render
+      TechDraw.SVG.Path.Normalize
+      TechDraw.SVG.Path.Parser
+      TechDraw.SVG.Path.Tokenizer
+      TechDraw.SVG.Path.Types
+
+      -- Electrical
+      TechDraw.Electrical.Types
+      TechDraw.Electrical.Symbols
+      TechDraw.Electrical.Ports
+
+      -- und alle Symbolmodule:
+      -- Resistor-Familie
+      TechDraw.Electrical.Symbols.Resistor
+      TechDraw.Electrical.Symbols.Potentiometer
+      TechDraw.Electrical.Symbols.Trimmer
+      TechDraw.Electrical.Symbols.ThermistorPTC
+      TechDraw.Electrical.Symbols.ThermistorNTC
+      -- Capacitor-Familie
+      TechDraw.Electrical.Symbols.Capacitor
+      TechDraw.Electrical.Symbols.CapacitorPolarized
+      TechDraw.Electrical.Symbols.CapacitorVariable
+      TechDraw.Electrical.Symbols.CapacitorTrimmer
+      -- Induktivitäten / Transformatoren
+      TechDraw.Electrical.Symbols.Inductor
+      TechDraw.Electrical.Symbols.Transformer
+      -- Schalter
+      TechDraw.Electrical.Symbols.SwitchOpen
+      TechDraw.Electrical.Symbols.SwitchClosed
+      TechDraw.Electrical.Symbols.SwitchSPDT
+      TechDraw.Electrical.Symbols.SwitchDPDT
+      TechDraw.Electrical.Symbols.SwitchToggle
+      TechDraw.Electrical.Symbols.Switch2P
+      TechDraw.Electrical.Symbols.PushButtonNO
+      TechDraw.Electrical.Symbols.PushButtonNC
+      -- Fuses
+      TechDraw.Electrical.Symbols.Fuse
+      TechDraw.Electrical.Symbols.FuseHolder
+      TechDraw.Electrical.Symbols.FuseThermal
+      TechDraw.Electrical.Symbols.CircuitBreaker
+      -- Power / Ground
+      TechDraw.Electrical.Symbols.Ground
+      TechDraw.Electrical.Symbols.EarthProtective
+      -- Aktive Bauelemente
+      TechDraw.Electrical.Symbols.Diode
+      TechDraw.Electrical.Symbols.LED
+      TechDraw.Electrical.Symbols.Zener
+      TechDraw.Electrical.Symbols.TransistorNPN
+      TechDraw.Electrical.Symbols.TransistorPNP
+      TechDraw.Electrical.Symbols.OpAmp
+      -- Energiequellen
+      TechDraw.Electrical.Symbols.Battery
+      TechDraw.Electrical.Symbols.DCSource
+      TechDraw.Electrical.Symbols.ACSource
+      -- Sonstiges
+      TechDraw.Electrical.Symbols.Motor
+      TechDraw.Electrical.Symbols.Lamp
+      TechDraw.Electrical.Symbols.Connector
+      TechDraw.Electrical.Symbols.Terminal
+
+      -- TechDraw.Electrical.Library
+      TechDraw.Electrical.Render
+      TechDraw.Electrical.Layout
+      TechDraw.Electrical.TestAllSymbols
+
+      TechDraw.Pcb.Elements.Axes
+      TechDraw.Pcb.Elements.Connector
+      TechDraw.Pcb.Elements.Dimension
+      TechDraw.Pcb.Elements.Label
+      TechDraw.Pcb.Elements.ModuleBox
+      TechDraw.Pcb.Elements.MountHole
+
+      TechDraw.Pcb.Layout.Align
+      TechDraw.Pcb.Layout.Compose
+      TechDraw.Pcb.Layout.Grid
+
+      TechDraw.Export.SVG
+      TechDraw.Export.PNG
+      TechDraw.Export.PDF
+      TechDraw.Export.Wasm
+
+  other-modules:
+    -- keine Wildcards, keine Electrical.*, alles sauber explizit
+
+  build-depends:
+      base >=4.14 && <5,
+      gi-gtk,
+      gi-cairo,
+      megaparsec >= 9.0,
+      aeson >= 2.0,
+      bytestring,
+      text,
+      containers
+  default-language: Haskell2010
+
+--executable pcb
+--  hs-source-dirs: examples
+--  main-is: PCB.hs
+--  build-depends:
+--  base,
+--  techdraw
+--  default-language: Haskell2010
+
+--executabel pcb2
+--  hs-source-dirs: examples
+--  main-is: PCB2.hs
+--  build-depends:
+--    base,
+--    techdraw
+--  default-language: Haskell2010
+
+--executable frontpanel
+--  hs-source-dirs: examples
+--  main-is: FrontPanel.hs
+--  build-depends:
+--    base,
+--      techdraw
+--  default-language: Haskell2010
+
+--executable complex-drawing
+--  hs-source-dirs: examples
+--  main-is: ComplexDrawing.hs
+--  build-depends:
+--      base,
+--      techdraw,
+--  default-language: Haskell2010
+
+executable splin-demo
+  hs-source-dirs: app
+  main-is: Main.hs
+  build-depends:
+    base,
+    techdraw,
+  default-language: Haskell2010
+
+--executable electrical-demo
+--  hs-source-dirs: examples
+--  main-is: ElectricalDemo.hs
+--  build-depends:
+--    base,
+--    techdraw
+--  default-language: Haskell2010
+
+executable generate-symbols
+  main-is: GenerateSymbols.hs
+  hs-source-dirs: app
+  build-depends:
+    base,
+    directory,
+    filepath,
+    megaparsec,
+    techdraw
+  default-language: Haskell2010
+
+executable test-all-symbols
+  hs-source-dirs: app
+  main-is: TestAll.hs
+  build-depends:
+        base >=4.14 && <5,
+        techdraw,
+        text
+  default-language: Haskell2010
+
+--executable zeichnung-demo
+--  hs-source-dirs: examples
+--  main-is: TestZeichnung.hs
+--  build-depends:
+-- base,
+-- techdraw
+-- default-language: Haskell2010

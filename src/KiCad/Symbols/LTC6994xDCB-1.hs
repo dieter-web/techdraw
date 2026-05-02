@@ -1,0 +1,9 @@
+module TechDraw.Electrical.Symbols.LTC6994xDCB-1 where
+
+import TechDraw.SVG
+
+renderLTC6994xDCB-1 :: Point -> SVG
+renderLTC6994xDCB-1 (x,y) = Group
+  [
+
+  ]

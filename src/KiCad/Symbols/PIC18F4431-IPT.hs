@@ -1,0 +1,9 @@
+module TechDraw.Electrical.Symbols.PIC18F4431-IPT where
+
+import TechDraw.SVG
+
+renderPIC18F4431-IPT :: Point -> SVG
+renderPIC18F4431-IPT (x,y) = Group
+  [
+
+  ]

@@ -1,0 +1,9 @@
+module TechDraw.Electrical.Symbols.R_Potentiometer_Small where
+
+import TechDraw.SVG
+
+renderR_Potentiometer_Small :: Point -> SVG
+renderR_Potentiometer_Small (x,y) = Group
+  [
+
+  ]

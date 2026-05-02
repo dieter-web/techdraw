@@ -1,0 +1,27 @@
+# Cabal / GHC
+dist/
+dist-newstyle/
+cabal.project.local
+*.hi
+*.o
+*.dyn_o
+*.dyn_hi
+
+# Editor
+*.swp
+*.kate-swp
+.kateproject
+.katesession
+
+# Generated SVGs
+test-output/
+*.svg
+
+# OS
+.DS_Store
+Thumbs.db
+
+# kicad
+kicad-libs/
+src/KiCad/
+
