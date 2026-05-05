@@ -1,3 +1,4 @@
+-- module TechDraw
 module TechDraw
   ( module TechDraw.SVG
   , module TechDraw.SVG.Types

@@ -8,116 +8,136 @@ import TechDraw.SVG.Types
 import TechDraw.SVG.Defaults (strokeDefault, fillNone)
 
 import TechDraw.Electrical.Types
-import TechDraw.Electrical.Symbols (renderSymbol, renderSymbolRaw)
+import TechDraw.Electrical.Symbols (renderSymbol)
 import TechDraw.Electrical.Ports (portsOfSymbol)
 import TechDraw.Electrical.Render
 
--- ------------------------------------------------------------
+---------------------------------------
 -- Liste aller SymbolType-Konstruktoren
--- ------------------------------------------------------------
-
-allSymbols :: [SymbolType]
-allSymbols =
-  [ Resistor
-  , Potentiometer
-  , Trimmer
-  , ThermistorPTC
-  , ThermistorNTC
-  , Capacitor
-  , CapacitorPolarized
-  , CapacitorVariable
-  , CapacitorTrimmer
-  , Inductor
-  , Transformer
-  , SwitchOpen
-  , SwitchClosed
-  , SwitchSPDT
-  , SwitchDPDT
-  , SwitchToggle
-  , Switch2P
-  , PushButtonNO
-  , PushButtonNC
-  , Fuse
-  , FuseHolder
-  , FuseThermal
-  , CircuitBreaker
-  , Ground
-  , EarthProtective
-  , Motor
-  , Lamp
-  , Diode
-  , LED
-  , Zener
-  , TransistorNPN
-  , TransistorPNP
-  , OpAmp
-  , Battery
-  , DCSource
-  , ACSource
-  , Connector
-  , Terminal
+-- ------------------------------------
+--
+symbolNames :: [(SymbolType, String)]
+symbolNames =
+  [ (Resistor, "Resistor")
+  , (Potentiometer, "Potentiometer")
+  , (Trimmer, "Trimmer")
+  , (ThermistorPTC, "ThermistorPTC")
+  , (ThermistorNTC, "ThermistorNTC")
+  , (Capacitor, "Capacitor")
+  , (CapacitorPolarized, "CapacitorPolar")
+  , (CapacitorVariable, "CapacitorVariable")
+  , (CapacitorTrimmer, "CapacitorTrimmer")
+  , (Inductor, "Inductor")
+  , (Transformer, "Transformer")
+  , (SwitchOpen, "SwitchOpen")
+  , (SwitchClosed, "SwitchClosed")
+  , (SwitchSPDT, "SwitchSPDT")
+  , (SwitchDPDT, "SwitchDPDT")
+  , (SwitchToggle, "SwitchToggle")
+  , (Switch2P, "Switch2P")
+  , (PushButtonNO, "PushButtonNO")
+  , (PushButtonNC, "PushButtonNC")
+  , (Fuse, "Fuse")
+  , (FuseHolder, "FuseHolder")
+  , (FuseThermal, "FuseThermal")
+  , (CircuitBreaker, "CircuitBreaker")
+  , (Ground, "Ground")
+  , (EarthProtective, "EarthProtective")
+  , (Lamp, "Lamp")
+  , (Motor, "Motor")
+  , (Diode, "Diode")
+  , (LED, "LED")
+  , (Zener, "Zener")
+  , (Battery, "Battery")
+  , (DCSource, "DCSource")
+  , (ACSource, "ACSource")
+  , (Terminal, "Terminal")
+  , (Connector, "Connector")
   ]
 
--- ------------------------------------------------------------
--- Rasterpositionen für alle Symbole
--- ------------------------------------------------------------
-
-positions :: [Pos]
-positions =
-  [ (fromIntegral (c * dx), fromIntegral (r * dy))
-  | (i, _) <- zip [0..] allSymbols
-  , let r = i `div` cols
-  , let c = i `mod` cols
-  ]
-  where
-    cols = 8
-    dx   = 120
-    dy   = 120
-
--- ------------------------------------------------------------
--- Hilfsfunktion: Symbol an Position rendern
--- ------------------------------------------------------------
-renderAtPos :: SymbolType -> Pos -> SVG
-renderAtPos sym (x,y) =
-  Transform [ Translate x y] (renderSymbolRaw sym(0,0))
 
 
---renderAtPos :: SymbolType -> Pos -> SVG--
---renderAtPos t pos =
---  renderSymbol t pos
+-- Position im Raster
+--positions :: [Pos]
+--positions = 
+--  [ (fromIntegral (c * dx), fromIntegral (r * dy))
+--  | i <- [0 .. length symbolNames - 1]
+--  , let r = i `div` cols
+--  , let c = i `mod` cols
+--  ]
+--  where
+--    cols = 8
+--    dx = 120
+--    dy = 120
 
--- ------------------------------------------------------------
--- Testbild: alle Symbole ohne Ports
--- ------------------------------------------------------------
+-- Symbolinstanz erzeugen
+mkSymbol :: SymbolType -> Pos -> Symbol
+mkSymbol t pos =
+  Symbol
+    { symType = t
+    , symPos = pos
+    , symRot = 0
+    , symScale = 0.8
+    }
 
-renderAllSymbols :: SVG
-renderAllSymbols =
-  Group (zipWith renderAtPos allSymbols positions)
-
--- ------------------------------------------------------------
--- Ports sichtbar machen
--- ------------------------------------------------------------
-
-renderPort :: Port -> SVG
-renderPort (Port name (x,y) _) =
+-- Symbol + Name rendern
+renderAtPos :: (SymbolType, String) -> Pos -> SVG
+renderAtPos (t,name) pos =
   Group
-    [ Circle (x,y) 4 strokeDefault fillNone
-    , Text (x+6, y-6) AnchorStart name
+    [ renderSym (mkSymbol t pos)
+    , Group (map renderPort (portsOfSymbol (mkSymbol t pos)))
+    , Text(fst pos, snd pos + 40) AnchorMiddle name
     ]
 
-renderSymbolWithPorts :: SymbolType -> Pos -> SVG
-renderSymbolWithPorts t pos =
-  let sym = Symbol t pos 0 1
+-- Alle Symbole rendern
+renderAllSymbols :: SVG
+renderAllSymbols =
+  Group (zipWith renderAtPos symbolNames positions)
+
+renderPort :: Port -> SVG
+renderPort (Port name (x,y) dir) =
+  Group
+    [ Circle (x,y) 3 strokeDefault fillNone
+    , Text (x+5, y-5) AnchorStart name
+    ]
+
+testWireLayout :: SVG
+testWireLayout =
+  let s1 = Symbol Resistor (100,100) 0 1
+      s2 = Symbol Capacitor (300, 100) 0 1
+      w1 = connect s1 "B" s2 "A"
   in Group
-       [ renderSymbol t pos
-       , Group (map renderPort (portsOfSymbol sym))
-       ]
+    [ renderSym s1
+    , renderSym s2
+    , renderWire w1
+    ]
 
--- ------------------------------------------------------------
--- Testbild: alle Symbole mit Ports
--- ------------------------------------------------------------
 
-renderAllSymbolsWithPorts :: SVG
-renderAllSymbolsWithPorts =
-  Group (zipWith renderSymbolWithPorts allSymbols positions)
+
+-- Old
+--renderAllSymbols :: SVG
+--renderAllSymbols =
+--  Group (zipWith renderAtPos symbolNames positions)
+--  where
+--    cols = 8
+--    dx   = 120
+--    dy   = 120
+--
+--    positions :: [Pos]
+--    positions =
+--      [ (fromIntegral (c * dx), fromIntegral (r * dy))
+--      | i <- [0 .. length symbolNames - 1]
+--      , let r = i `div` cols
+--      , let c = i `mod` cols
+--      ]
+
+--    renderAtPos :: (SymbolType, String) -> Pos -> SVG
+--    renderAtPos (t, name) (px, py) =
+--      Group
+--        [ Transform (Translate px py) $
+--            Transform (Scale 0.8 0.8) $
+--              Transform (Rotate 15 (0,0)) $
+--                renderSymbol t (0,0)
+--        , Text (px, py + 40) AnchorMiddle name
+--        ]
 
