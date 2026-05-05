@@ -25,7 +25,6 @@ data SVG
     | Text Pos TextAnchor String
     | Group [SVG]
     | Transform Transform SVG
-    --  | Transform [Transform] SVG
     deriving (Show, Eq)
 
 data SvgDoc = SvgDoc
@@ -65,4 +64,5 @@ data Transform
     = Translate Double Double
     | Rotate Double Pos
     | Scale Double Double
+    | TransformList [Transform]
     deriving (Show, Eq)

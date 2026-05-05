@@ -22,11 +22,32 @@ renderElectrical (Electrical syms wires) =
     Group (map renderSym syms ++ map renderWire wires)
 
 renderSym :: Symbol -> SVG
-renderSym (Symbol t pos rot scale) =
-    Transform (Translate (fst pos) (snd pos)) $
-        Transform (Rotate rot (0, 0)) $
-            Transform (Scale scale scale) $
-                renderSymbol t (0, 0)
+renderSym (Symbol t (px, py) rot scale) =
+    Transform
+        ( TransformList
+            [ Scale scale scale
+            , Rotate rot (0, 0)
+            , Translate px py
+            ]
+        )
+        (renderSymbol t (0, 0))
+
+-- Alternative
+-- renderSym (Symbol t (px,py) rot scale) =
+--   Transform (Translate px py) (
+--     Transform (Rotate rot (0,0))(
+--       Transform (Scale scale scale)(
+--         renderSymbol t (0,0)
+--       )
+--     )
+--   )
+
+-- renderSym :: Symbol -> SVG
+-- renderSym (Symbol t pos rot scale) =
+--    Transform (Translate (fst pos) (snd pos)) $
+--        Transform (Rotate rot (0, 0)) $
+--            Transform (Scale scale scale) $
+--                renderSymbol t (0, 0)
 
 -- renderSym :: Symbol -> SVG
 -- renderSym (Symbol t(px,py) rot scale) =

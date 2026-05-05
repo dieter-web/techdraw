@@ -63,6 +63,8 @@ renderTransform (Rotate a (cx, cy)) =
     "rotate(" ++ show a ++ "," ++ show cx ++ "," ++ show cy ++ ")"
 renderTransform (Scale sx sy) =
     "scale(" ++ show sx ++ "," ++ show sy ++ ")"
+renderTransform (TransformList ts) =
+    unwords (map renderTransform ts)
 
 ------------
 -- renderSVG
@@ -151,7 +153,11 @@ renderSVG (Group xs) =
 --    "<g transform=\"" ++ toSvgMatrix (combineTransforms trs) ++ "\">\n"
 --
 renderSVG (Transform tr svg) =
-    "<g transform=\"" ++ renderTransform tr ++ "\">\n"
+    "<g transform=\""
+        ++ renderTransform tr
+        ++ "\">\n"
+        ++ renderSVG svg
+        ++ "</g>\n"
 
 -- Utility-Funktionen
 --
