@@ -9,8 +9,9 @@ module TechDraw.SVG.Render (
 
 import TechDraw.SVG
 import TechDraw.SVG.Matrix
-import TechDraw.SVG.Path
 import TechDraw.SVG.Path.Render
+import TechDraw.SVG.Paths
+import TechDraw.SVG.Style
 import TechDraw.SVG.Types
 
 svgHeader :: Double -> Double -> String
@@ -158,30 +159,35 @@ renderSVG (Transform tr svg) =
         ++ "\">\n"
         ++ renderSVG svg
         ++ "</g>\n"
+renderSVG (LineStyled p1 p2 style) =
+    renderSVG (Line p1 p2 (Just (toStroke style)))
+renderSVG (RectStyled pos size style fill) =
+    renderSVG (Rect pos size (Just (toStroke style)) fill)
+renderSVG (CircleStyled pos r style fill) =
+    renderSVG (Circle pos r (Just (toStroke style)) fill)
+renderSVG (TextStyled pos anchor str style) =
+    renderSVG (Text pos anchor str) -- Text hat keinen Stroke im SVG
 
 -- Utility-Funktionen
 --
 translate :: Pos -> SVG -> SVG
-translate (dx, dy) svg =
-    Transform (Translate dx dy) svg
+translate (dx, dy) = Transform (Translate dx dy)
+
+rotate :: Double -> SVG -> SVG
+rotate a = Transform (Rotate a (0, 0))
+
+scale :: Double -> SVG -> SVG
+scale s = Transform (Scale s s)
 
 --
 rotateAround :: Double -> Pos -> SVG -> SVG
---
-
 rotateAround a p svg =
     Transform (Rotate a p) svg
 
---
 scaleUniform :: Double -> SVG -> SVG
---
-
 scaleUniform s svg =
     Transform (Scale s s) svg
 
---
 scaleXY :: Double -> Double -> SVG -> SVG
---
-
 scaleXY sx sy svg =
     Transform (Scale sx sy) svg

@@ -1,15 +1,15 @@
 module TechDraw.SVG.BoundingBox (
     bbox,
     pathToPoints,
+    BBox,
 ) where
 
 import TechDraw.SVG
 import TechDraw.SVG.Matrix
+import TechDraw.SVG.Paths
 import TechDraw.SVG.Types
 
-import TechDraw.SVG.Path
-
-type BBox = (Pos, Pos)
+type BBox = (Pos, Pos) -- ((minX, minY), (maxX, maxY))
 
 -- Hilfsfunktionen - Punkt transformieren
 applyMat :: Mat3 -> Pos -> Pos
@@ -36,12 +36,12 @@ bbox (Text (x, y) _anchor _str) =
     ((x, y), (x, y))
 -- Bounding-Box für Gruppen
 bbox (Group svgs) =
-    foldl1 merge (map bbox svgs)
-  where
-    merge ((x1, y1), (x2, y2)) ((x1', y1'), (x2', y2')) =
-        ( (min x1 x1', min y1 y1')
-        , (max x2 x2', max y2 y2')
-        )
+    foldl1 mergeBBox (map bbox svgs)
+--  where
+--    merge ((x1, y1), (x2, y2)) ((x1', y1'), (x2', y2')) =
+--        ( (min x1 x1', min y1 y1')
+--        , (max x2 x2', max y2 y2')
+--        )
 
 -- Bounding-Box für Transform-Listen
 bbox (Transform trs svg) =
@@ -59,6 +59,35 @@ bbox (Transform trs svg) =
 -- Hilfsfunktionen
 minPos (x1, y1) (x2, y2) = (min x1 x2, min y1 y2)
 maxPos (x1, y1) (x2, y2) = (max x1 x2, max y1 y2)
+
+mergeBBox :: BBox -> BBox -> BBox
+mergeBBox ((ax, ay), (bx, by)) ((cx, cy), (dx, dy)) =
+    ( (min ax cx, min ay cy)
+    , (max bx dx, max by dy)
+    )
+
+transformBBox :: Mat3 -> BBox -> BBox
+transformBBox m ((x1, y1), (x2, y2)) =
+    let pts =
+            [ applyMat3 m (x1, y1)
+            , applyMat3 m (x1, y2)
+            , applyMat3 m (x2, y1)
+            , applyMat3 m (x2, y2)
+            ]
+        xs = map fst pts
+        ys = map snd pts
+     in ((minimum xs, minimum ys), (maximum xs, maximum ys))
+
+applyMat3 :: Mat3 -> Pos -> Pos
+applyMat3
+    ( (a, b, c)
+        , (d, e, f)
+        , (g, h, i)
+        )
+    (x, y) =
+        ( a * x + b * y + c
+        , d * x + e * y + f
+        )
 
 pathToPoints :: [PathCommand] -> [Pos]
 pathToPoints cmds =

@@ -5,7 +5,7 @@ module TechDraw.SVG.Types (
 )
 where
 
-import TechDraw.SVG.Path
+import TechDraw.SVG.Paths
 
 -- type Coord = Double
 -- type Pos = (Coord, Coord) -- Umschreibung für Point, weil sonst doppelt

@@ -1,10 +1,10 @@
 module TechDraw.SVG.Matrix
   ( Mat3
   , matIdentity
-  , matMul
   , matTranslate
   , matScale
   , matRotate
+  , matMul
   , toMat3
   , combineTransforms
   , toSvgMatrix
@@ -27,24 +27,25 @@ matIdentity =
   )
 
 matMul :: Mat3 -> Mat3 -> Mat3
-matMul ( (a11, a12, a13)
-       , (a21, a22, a23)
-       , (a31, a32, a33)
-       )
-       ( (b11, b12, b13)
-       , (b21, b22, b23)
-       , (b31, b32, b33)
-       ) =
-  ( (a11*b11 + a12*b21 + a13*b31,
-     a11*b12 + a12*b22 + a13*b32,
-     a11*b13 + a12*b23 + a13*b33)
-  , (a21*b11 + a22*b21 + a23*b31,
-     a21*b12 + a22*b22 + a23*b32,
-     a21*b13 + a22*b23 + a23*b33)
-  , (a31*b11 + a32*b21 + a33*b31,
-     a31*b12 + a32*b22 + a33*b32,
-     a31*b13 + a32*b23 + a33*b33)
+matMul
+  ( (a1,b1,c1)
+  , (d1,e1,f1)
+  , (g1,h1,i1)
   )
+  ( (a2,b2,c2)
+  , (d2,e2,f2)
+  , (g2,h2,i2)
+  ) =
+    ( (a1*a2 + b1*d2 + c1*g2,
+       a1*b2 + b1*e2 + c1*h2,
+       a1*c2 + b1*f2 + c1*i2)
+    , (d1*a2 + e1*d2 + f1*g2,
+       d1*b2 + e1*e2 + f1*h2,
+       d1*c2 + e1*f2 + f1*i2)
+    , (g1*a2 + h1*d2 + i1*g2,
+       g1*b2 + h1*e2 + i1*h2,
+       g1*c2 + h1*f2 + i1*i2)
+    )
 
 matTranslate :: Double -> Double -> Mat3
 matTranslate tx ty =
@@ -86,6 +87,7 @@ toMat3 (Rotate deg (cx, cy)) =
 
 
 -- Liste von Transformationen kombinieren 
+--
 combineTransforms :: [Transform] -> Mat3
 combineTransforms trs =
   foldl matMul matIdentity (map toMat3 trs) -- fodl = Transformationen in der Reihenfolge anwenden

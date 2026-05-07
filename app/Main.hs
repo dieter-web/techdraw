@@ -4,7 +4,7 @@ import System.IO (writeFile)
 
 import TechDraw.SVG
 import TechDraw.SVG.Types
-import TechDraw.SVG.Path
+import TechDraw.SVG.Paths
 import TechDraw.SVG.Render
 import TechDraw.SVG.Path.Render
 import TechDraw.Electrical.Render

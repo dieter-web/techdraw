@@ -26,12 +26,12 @@ data Pin = Pin
     }
     deriving (Eq, Show)
 
--- Beispiel Symbol erzeugen: Symbol Capacitor(200,150) 45 1.5
+-- Ein platziertes, transformierbares Symbol
 data Symbol = Symbol
-    { symType :: SymbolType
-    , symPos :: Pos
-    , symRot :: Double
-    , symScale :: Double
+    { symType :: SymbolType -- welcher Symboltyp
+    , symPos :: Pos -- Position im Dokument
+    , symRot :: Double -- Rotation in Grad
+    , symScale :: Double -- Skalierung
     }
     deriving (Eq, Show)
 

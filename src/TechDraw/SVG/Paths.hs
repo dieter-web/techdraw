@@ -1,4 +1,4 @@
-module TechDraw.SVG.Path
+module TechDraw.SVG.Paths
   ( PathCommand(..)
   )
   where

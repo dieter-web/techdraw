@@ -7,22 +7,31 @@ module TechDraw.SVG (
     Fill (..),
     StrokeStyle (..),
     Transform (..),
+    Point,
+    LineCap (..),
+    LineJoin (..),
 )
 where
 
-import TechDraw.SVG.Path
+import TechDraw.SVG.Paths
 import TechDraw.SVG.Types
+
+type Point = (Double, Double)
 
 -- Konstruktoren
 -- z.B. Group :: [SVG] -> SVG ...
 data SVG
     = Line Pos Pos (Maybe Stroke)
+    | LineStyled Pos Pos StrokeStyle
     | Rect Pos (Double, Double) (Maybe Stroke) Fill
+    | RectStyled Pos (Double, Double) StrokeStyle Fill
     | Circle Pos Double (Maybe Stroke) Fill
+    | CircleStyled Pos Double StrokeStyle Fill
     | Polyline [Pos] (Maybe Stroke)
     | Polygon [Pos] (Maybe Stroke) Fill
     | Path [PathCommand] (Maybe Stroke) Fill
     | Text Pos TextAnchor String
+    | TextStyled Pos TextAnchor String StrokeStyle
     | Group [SVG]
     | Transform Transform SVG
     deriving (Show, Eq)
@@ -52,11 +61,23 @@ data Fill
     | FillNone
     deriving (Show, Eq)
 
+data LineCap
+    = CapButt
+    | CapRound
+    | CapSquare
+    deriving (Eq, Show)
+
+data LineJoin
+    = JoinMiter
+    | JoinRound
+    | JoinBevel
+    deriving (Eq, Show)
+
 data StrokeStyle = StrokeStyle
-    { strokeColor :: String
-    , strokeWidth :: Double
-    , fillColor :: String
-    , fontSize :: Double
+    { styleColor :: Color
+    , styleWidth :: Double
+    , styleLineCap :: LineCap
+    , styleLineJoin :: LineJoin
     }
     deriving (Show, Eq)
 
