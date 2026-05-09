@@ -6,7 +6,6 @@ module TechDraw.SVG (
     Color (..),
     Fill (..),
     StrokeStyle (..),
-    Transform (..),
     Point,
     LineCap (..),
     LineJoin (..),
@@ -14,7 +13,7 @@ module TechDraw.SVG (
 where
 
 import TechDraw.SVG.Paths
-import TechDraw.SVG.Types
+import TechDraw.SVG.Types (Length, Pos, Transform (..))
 
 type Point = (Double, Double)
 
@@ -79,11 +78,4 @@ data StrokeStyle = StrokeStyle
     , styleLineCap :: LineCap
     , styleLineJoin :: LineJoin
     }
-    deriving (Show, Eq)
-
-data Transform
-    = Translate Double Double
-    | Rotate Double Pos
-    | Scale Double Double
-    | TransformList [Transform]
     deriving (Show, Eq)

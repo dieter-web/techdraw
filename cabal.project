@@ -1,0 +1,3 @@
+packages:
+  ./techdraw.cabal 
+  ./electrical-demo/electrical-demo.cabal

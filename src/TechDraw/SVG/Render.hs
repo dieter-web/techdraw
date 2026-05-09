@@ -2,9 +2,6 @@ module TechDraw.SVG.Render (
     renderSvgDoc,
     renderSVG,
     renderTransform,
-    translate,
-    rotateAround,
-    scaleUniform,
 ) where
 
 import TechDraw.SVG
@@ -167,27 +164,3 @@ renderSVG (CircleStyled pos r style fill) =
     renderSVG (Circle pos r (Just (toStroke style)) fill)
 renderSVG (TextStyled pos anchor str style) =
     renderSVG (Text pos anchor str) -- Text hat keinen Stroke im SVG
-
--- Utility-Funktionen
---
-translate :: Pos -> SVG -> SVG
-translate (dx, dy) = Transform (Translate dx dy)
-
-rotate :: Double -> SVG -> SVG
-rotate a = Transform (Rotate a (0, 0))
-
-scale :: Double -> SVG -> SVG
-scale s = Transform (Scale s s)
-
---
-rotateAround :: Double -> Pos -> SVG -> SVG
-rotateAround a p svg =
-    Transform (Rotate a p) svg
-
-scaleUniform :: Double -> SVG -> SVG
-scaleUniform s svg =
-    Transform (Scale s s) svg
-
-scaleXY :: Double -> Double -> SVG -> SVG
-scaleXY sx sy svg =
-    Transform (Scale sx sy) svg
