@@ -1,0 +1,23 @@
+cabal-version: 3.8
+name:          techdraw-electrical
+version:       0.1.0.0
+build-type:    Simple
+
+library
+  exposed-modules:
+      TechDraw.Electrical.Symbols.Resistor
+      TechDraw.Electrical.Symbols.Capacitor
+      TechDraw.Electrical.Symbols.Inductor
+      TechDraw.Electrical.Net
+      TechDraw.Electrical.Ports
+      TechDraw.Electrical.Types
+      TechDraw.Electrical.Render
+
+  hs-source-dirs: src
+  build-depends:
+      base >=4.18 && <5
+    , text  
+    , techdraw-core
+    , techdraw-svg
+  default-language: Haskell2010
+

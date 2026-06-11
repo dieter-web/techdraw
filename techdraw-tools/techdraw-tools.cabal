@@ -1,0 +1,16 @@
+cabal-version: 3.8
+name:          techdraw-tools
+version:       0.1.0.0
+build-type:    Simple
+
+executable techdraw-demo
+  main-is: Main.hs
+  hs-source-dirs: app
+  build-depends:
+      base >=4.18 && <5
+    , text  
+    , techdraw-core
+    , techdraw-svg
+    , techdraw-electrical
+  default-language: Haskell2010
+

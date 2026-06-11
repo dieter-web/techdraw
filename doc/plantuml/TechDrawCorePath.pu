@@ -1,0 +1,54 @@
+@startuml TechDrawCorePath
+
+package "TechDraw.Core.Path" {
+  class PathCmd {
+  }
+
+  class Path {
+    +path(cmds : [PathCmd]) : Shape
+    +moveTo(x : Double, y : Double) : PathCmd
+    +lineTo(x : Double, y : Double) : PathCmd
+    +closePath() : PathCmd
+  }
+}
+
+package "TechDraw.Core.Types" {
+  class Point {
+    +px : Double
+    +py : Double
+  }
+
+  class PathCmd
+  class Transform
+  class Shape
+
+}
+
+' Beziehungen
+PathCmd <|-- M
+PathCmd <|-- L
+PathCmd <|-- Z
+
+' Transformationen 
+Transform <|-- Translate Double Double
+Transform <|-- Rotate Double
+Transform <|-- Scale Double Double
+Transform <|-- Matrix Double Double Double Double Double Double
+
+' Shape AST 
+Shape <|-- SPath [PathCmd]
+Shape <|-- SLine Point Point 
+Shape <|-- SRect Point Double Double 
+Shape <|-- SCircle Point Double 
+Shape <|-- SEllipse Point Double Double 
+Shape <|-- SText Point String
+Shape <|-- SGroup [Shape]
+Shape <|-- SStyled Shape (Maybe Stroke) (Maybe Fill)
+Shape <|-- STransformed Shape [Transform]
+
+Path --> Shape
+PathCmd --> Point
+SPath --> PathCmd
+
+@enduml
+

@@ -1,0 +1,9 @@
+@startuml TechDraw.Core.Path
+class Path {
+  +PathCmd : String
+  +path : Shape
+  +moveTo : PathCmd
+  +lineTo : PathCmd
+  +closePath : PathCmd
+}
+@enduml

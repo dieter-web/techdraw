@@ -1,0 +1,49 @@
+@startuml TechDrawElectrical
+
+class Schematic {
+  +id : String
+  +symbols : [Symbol]
+  +wires : [Wire]
+}
+
+class Symbol {
+  +id : String
+  +name : String
+  +position : Point
+  +rotation : Angle
+  +ports : [Port]
+}
+
+class Port {
+  +id : String
+  +name : String
+  +kind : PortKind
+  +position : Point
+}
+
+class Wire {
+  +id : String
+  +from : Port
+  +to : Port
+  +path : [Point]
+}
+
+class Point {
+  +x : Double
+  +y : Double
+}
+
+enum PortKind {
+  Input
+  Output
+  InOut
+}
+
+Schematic "1" o-- "*" Symbol
+Schematic "1" o-- "*" Wire
+Symbol "1" o-- "*" Port
+Wire --> Port : from
+Wire --> Port : to
+
+@enduml
+

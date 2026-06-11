@@ -1,0 +1,46 @@
+@startuml TechDrawModules
+
+package "TechDraw.Core" {
+  class TDDocument
+  class TDShape
+  class TDStyle
+}
+
+package "TechDraw.SVG" {
+  class SvgElement
+  class SvgRenderer
+}
+
+package "TechDraw.Electrical" {
+  class Symbol
+  class Port
+  class Wire
+  class Schematic
+}
+
+package "TechDraw.Canvas" {
+  class CanvasView
+  class CanvasController
+}
+
+package "TechDraw.CLI" {
+  class MainCLI
+}
+
+TDDocument "1" o-- "*" TDShape
+TDShape --> TDStyle
+
+SvgRenderer --> TDDocument
+SvgRenderer --> SvgElement
+
+Schematic "1" o-- "*" Symbol
+Symbol "1" o-- "*" Port
+Schematic "1" o-- "*" Wire
+
+CanvasView --> TDDocument
+CanvasController --> CanvasView
+
+MainCLI --> SvgRenderer
+
+@enduml
+

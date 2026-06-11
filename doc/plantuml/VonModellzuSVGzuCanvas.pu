@@ -1,0 +1,21 @@
+@startuml TechDrawPipeline
+
+skinparam componentStyle rectangle
+
+component "Electrical Model\n(Schematic)" as ElectricalModel
+component "Layout Engine" as Layout
+component "TechDraw.Core\n(TDDocument)" as CoreDoc
+component "SVG Renderer\n(SvgRenderer)" as SvgR
+component "SVG File\n(.svg)" as SvgFile
+component "Canvas Renderer\n(CanvasView/Controller)" as Canvas
+component "GTK/GUI" as GUI
+
+ElectricalModel --> Layout : berechnet Positionen
+Layout --> CoreDoc : erzeugt TDDocument
+CoreDoc --> SvgR : render()
+SvgR --> SvgFile : schreibt SVG
+SvgFile --> Canvas : lädt & rastert
+Canvas --> GUI : anzeigen
+
+@enduml
+
