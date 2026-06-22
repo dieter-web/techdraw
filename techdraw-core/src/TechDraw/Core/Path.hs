@@ -1,6 +1,5 @@
 module TechDraw.Core.Path
-  ( PathCmd(..)
-  , path
+  ( path
   , moveTo
   , lineTo
   , closePath

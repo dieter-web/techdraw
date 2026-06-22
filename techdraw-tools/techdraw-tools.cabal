@@ -10,7 +10,8 @@ executable techdraw-demo
       base >=4.18 && <5
     , text  
     , techdraw-core
-    , techdraw-svg
+    , techdraw-svg 
+    , techdraw-convert 
     , techdraw-electrical
   default-language: Haskell2010
 

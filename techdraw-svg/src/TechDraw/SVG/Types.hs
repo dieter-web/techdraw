@@ -1,21 +1,28 @@
 module TechDraw.SVG.Types
-  ( Shape(..) 
-  , Fill(..)
-  , SvgDoc(..)
-  ) where
+  ( Svg (..),
+    SvgDoc (..),
+  )
+where
 
-import TechDraw.Core.Types
 import TechDraw.Core.Style
+import TechDraw.Core.Types
 
--- | Defined but not used 
+-- | Defined but not used
+
 {-
-data SVG 
+data SVG
   = Group [(Shape, Stroke, Maybe Fill)]
   | Single (Shape, Stroke, Maybe Fill)
 -}
 
+data Svg
+  = SvgShape Shape Stroke Fill
+  | SvgGroup [Svg]
+  deriving (Show, Eq)
+
 data SvgDoc = SvgDoc
-  { svgWidth :: Double
-  , svgHeight :: Double
-  , svgRoot :: [(Shape, Stroke, Maybe Fill)]
-  } deriving (Show, Eq)
+  { svgWidth :: Double,
+    svgHeight :: Double,
+    svgRoot :: [(Shape, Stroke, Maybe Fill)]
+  }
+  deriving (Show, Eq)

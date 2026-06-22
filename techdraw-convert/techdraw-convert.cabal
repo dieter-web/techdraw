@@ -1,0 +1,16 @@
+cabal-version: 3.8
+name:          techdraw-convert
+version:       0.1.0.0
+build-type:    Simple
+
+library
+  exposed-modules:
+    TechDraw.Convert.ShapeToSvg
+  hs-source-dirs: src
+  build-depends:
+     base >=4.18 && <5
+   , text
+   , techdraw-core
+   , techdraw-svg
+  default-language: Haskell2010
+
