@@ -54,9 +54,16 @@ Diagnostics:
 --    styleFill :: Maybe Fill
 --  }
 --  deriving (Show, Eq)
+{-
 data Style = Style
   { styleStroke :: Maybe (Color, Double),
     styleFill :: Maybe Color
+  }
+-}
+
+data Style = Style
+  { styleStroke :: Maybe Stroke,
+    styleFill :: Maybe Fill
   }
 
 -- defaultStyle :: Style

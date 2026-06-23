@@ -1,15 +1,16 @@
 {-# LANGUAGE NamedFieldPuns #-}
 
 module TechDraw.Electrical.Types
-  ( Electrical(..)
-  , ElectricalElement(..)
-  , Symbol(..)
-  , Orientation(..)
-  , Wire(..)
-  , NetId(..)
-  ) where
+  ( Electrical (..),
+    ElectricalElement (..),
+    Symbol (..),
+    Orientation (..),
+    Wire (..),
+    NetId (..),
+  )
+where
 
-import TechDraw.Core.Types(Point)
+import TechDraw.Core.Types (Point)
 
 -- | Orientation of a symbol in degrees.
 data Orientation
@@ -19,9 +20,9 @@ data Orientation
   | Rot270
   deriving (Show, Eq)
 
-orientationToDeg :: Orientation -> Double 
-orientationToDeg Rot0   = 0
-orientationToDeg Rot90  = 90
+orientationToDeg :: Orientation -> Double
+orientationToDeg Rot0 = 0
+orientationToDeg Rot90 = 90
 orientationToDeg Rot180 = 180
 orientationToDeg Rot270 = 270
 
@@ -30,26 +31,26 @@ data Symbol
   = Resistor
   | Capacitor
   | Inductor
---  | Switch
---  | Lamp
---  | Motor
---  | Junction
---  | Diode
---  | LED
---  | Switch
---  | Lamp
---  | Motor
---  | JunctionD
---  | Ground
---  | VoltageSource
---  | CurrentSource
+  --  | Switch
+  --  | Lamp
+  --  | Motor
+  --  | Junction
+  --  | Diode
+  --  | LED
+  --  | Switch
+  --  | Lamp
+  --  | Motor
+  --  | JunctionD
+  --  | Ground
+  --  | VoltageSource
+  --  | CurrentSource
   deriving (Show, Eq)
 
 -- | A placed electrical element in a schematic.
 data ElectricalElement = ElectricalElement
-  { elSymbol      :: Symbol
-  , elPosition    :: Point
-  , elOrientation :: Orientation
+  { elSymbol :: Symbol,
+    elPosition :: Point,
+    elOrientation :: Orientation
   }
   deriving (Show, Eq)
 
@@ -61,16 +62,17 @@ data Point = Point
 -}
 
 data Wire = Wire
-  { wStart :: Point
-  , wEnd   :: Point
-  } deriving (Show, Eq)
+  { wStart :: Point,
+    wEnd :: Point
+  }
+  deriving (Show, Eq)
 
 data Electrical = Electrical
-  { elems :: [ElectricalElement]
-  , wires :: [Wire]
-  } deriving (Show, Eq)
+  { elems :: [ElectricalElement],
+    wires :: [Wire]
+  }
+  deriving (Show, Eq)
 
 -- | Identifier for a net (electrical connection).
 newtype NetId = NetId String
   deriving (Show, Eq)
-
