@@ -66,6 +66,14 @@ data Style = Style
     styleFill :: Maybe Fill
   }
 
+{-
+data Style = Style
+  { strokeWidth :: Double
+  , strokeColor :: String
+  , fillColor   :: String
+  }
+-}
+
 -- defaultStyle :: Style
 -- defaultStyle =
 --  Style

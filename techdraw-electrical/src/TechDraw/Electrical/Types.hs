@@ -1,4 +1,5 @@
-{-# LANGUAGE NamedFieldPuns #-}
+-- {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module TechDraw.Electrical.Types
   ( Electrical (..),
@@ -13,6 +14,19 @@ where
 import TechDraw.Core.Types (Point)
 
 -- | Orientation of a symbol in degrees.
+
+{-
+ - data Orientation
+ -   = Deg Double
+ -   | Rad Double
+ -   deriving (Eq, Show)
+ -
+ -   oder
+ -
+ -   newtype Orientation = Orientation Double
+ -     deriving(Eq, Show)
+ -
+ -}
 data Orientation
   = Rot0
   | Rot90
@@ -29,6 +43,8 @@ orientationToDeg Rot270 = 270
 -- | All electrical symbols supported by TechDraw.
 data Symbol
   = Resistor
+  | ResistorIEC
+  | ResistorZigZag
   | Capacitor
   | Inductor
   --  | Switch
@@ -53,13 +69,6 @@ data ElectricalElement = ElectricalElement
     elOrientation :: Orientation
   }
   deriving (Show, Eq)
-
-{-
-data Point = Point
-  { px :: Double
-  , py :: Double
-  } deriving (Show, Eq)
--}
 
 data Wire = Wire
   { wStart :: Point,

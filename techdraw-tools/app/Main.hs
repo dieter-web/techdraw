@@ -1,14 +1,10 @@
-{-# LANGUAGE NamedFieldPuns #-}
+-- {-# LANGUAGE NamedFieldPuns #-}
 
 module Main where
 
-import TechDraw.Core.Style
-import TechDraw.Core.Types
-  ( PathCmd (..),
-    Point (..),
-    Shape (..),
-    Transform (..),
-  )
+import qualified Data.Text.IO as T
+import TechDraw.Core.Types (Point (..))
+import TechDraw.Electrical.Render
 import TechDraw.Electrical.Types
   ( Electrical (..),
     ElectricalElement (..),
@@ -16,9 +12,9 @@ import TechDraw.Electrical.Types
     Symbol (..),
     Wire (..),
   )
-import TechDraw.SVG.Types
-  ( SvgDoc (..),
-  )
+import TechDraw.SVG.Render
+
+-- import TechDraw.SVG.Types (SvgDoc (..))
 
 -- ------------------------------------------------------------
 -- Beispiel: ein kleines Electrical-Modell
@@ -34,7 +30,7 @@ exampleElectrical =
               elOrientation = Rot0
             },
           ElectricalElement
-            { elSymbol = Capacitor,
+            { elSymbol = Inductor,
               elPosition = Point 80 20,
               elOrientation = Rot0
             }
@@ -45,46 +41,15 @@ exampleElectrical =
     }
 
 -- ------------------------------------------------------------
--- Dummy-Renderer: Electrical -> [(Shape, Stroke, Maybe Fill)]
--- ------------------------------------------------------------
-
--- Du ersetzt dies später durch dein echtes Render-Modul.
-dummyRenderElectrical :: Electrical -> [(Shape, Stroke, Maybe Fill)]
-dummyRenderElectrical Electrical {elems, wires} =
-  concatMap renderElem elems ++ concatMap renderWire wires
-  where
-    renderElem ElectricalElement {elPosition = Point x y} =
-      [ ( SRect (Point (x - 5) (y - 5)) 10 10,
-          defaultStroke,
-          Nothing
-        )
-      ]
-
-    renderWire Wire {wStart, wEnd} =
-      [ ( SLine wStart wEnd,
-          defaultStroke,
-          Nothing
-        )
-      ]
-
--- ------------------------------------------------------------
--- SvgDoc erzeugen
--- ------------------------------------------------------------
-
-makeSvg :: Electrical -> SvgDoc
-makeSvg e =
-  SvgDoc
-    { svgWidth = 200,
-      svgHeight = 200,
-      svgRoot = dummyRenderElectrical e
-    }
-
--- ------------------------------------------------------------
 -- Main
 -- ------------------------------------------------------------
 
 main :: IO ()
 main = do
-  let doc = makeSvg exampleElectrical
-  putStrLn "SVG-Dokument erzeugt:"
-  print doc
+  let electrical = exampleElectrical
+      doc = toSvgDoc 800 600 electrical
+      svgText = renderSvgDoc doc
+
+  T.writeFile "schaltplan.svg" svgText
+
+  putStrLn "SVG-Document 'schaltplan.svg' geschrieben."

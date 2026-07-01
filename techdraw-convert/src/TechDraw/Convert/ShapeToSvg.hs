@@ -25,9 +25,17 @@ Diagnostics:
            SGroup _
            ... [-Wincomplete-patterns]
 2. Variable not in scope: defaultFill :: Fill [-Wdeferred-out-of-scope-variables].
--}
+
 shapeToSvg :: Shape -> Svg
 shapeToSvg sh =
   SvgShape sh defaultStroke defaultFill
+
 shapeToSvg (SGroup xs) =
   SvgGroup (map shapeToSvg xs)
+-}
+
+shapeToSvg :: Shape -> Svg
+shapeToSvg (SGroup xs) =
+  SvgGroup (map shapeToSvg xs)
+shapeToSvg sh =
+  SvgShape sh defaultStroke defaultFill

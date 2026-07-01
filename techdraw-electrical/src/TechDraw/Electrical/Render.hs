@@ -1,65 +1,79 @@
-{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module TechDraw.Electrical.Render
-  ( renderElectrical
-  , renderElement
-  , renderWire
-  , toSvgDoc
-  ) where 
+  ( renderElement,
+    renderElectrical,
+    toSvgDoc,
+  )
+where
 
-import TechDraw.SVG.Types
-import TechDraw.Core.Types
 import TechDraw.Core.Style
+import TechDraw.Core.Transform
+import TechDraw.Core.Types
+import TechDraw.Electrical.Symbols.Resistor
 import TechDraw.Electrical.Types
---, Transform(..), Style(..)) 
+
+-- ============================================================
+-- 1. Symbol auswählen (reine Geometrie am Ursprung)
+-- ============================================================
+
+symbolOf :: Symbol -> (Shape, Stroke, Maybe Fill)
+symbolOf ResistorIEC = resistorRectSymbol
+symbolOf ResistorZigZag = resistorZigZagSymbol
+symbolOf _ = resistorRectSymbol -- fallback
+
+-- ============================================================
+-- 2. Transform anwenden (Position + Rotation)
+-- ============================================================
+
+applyElementTransform ::
+  ElectricalElement ->
+  (Shape, Stroke, Maybe Fill) ->
+  (Shape, Stroke, Maybe Fill)
+applyElementTransform el (sh, st, mf) =
+  let pos = elPosition el
+      rot = elOrientation el
+      tf = rotate rot <> translate pos
+   in ( transformShape tf sh,
+        st,
+        mf
+      )
+
+-- ============================================================
+-- 3. Leads generieren (Anschlussleitungen)
+-- ============================================================
+
+renderLeads :: ElectricalElement -> [(Shape, Stroke, Maybe Fill)]
+renderLeads el =
+  let pos = elPosition el
+      rot = elOrientation el
+      dir = orientationVector rot
+      leadLen = 20
+
+      pIn = pos - scale leadLen dir
+      pOut = pos + scale leadLen dir
+
+      leadStroke = Stroke "black" 2
+   in [ (SPath [M pIn, L pos], leadStroke, Nothing),
+        (SPath [M pos, L pOut], leadStroke, Nothing)
+      ]
+
+-- ============================================================
+-- 4. Element rendern (Symbol + Leads)
+-- ============================================================
 
 renderElement :: ElectricalElement -> [(Shape, Stroke, Maybe Fill)]
-renderElement ElectricalElement {elSymbol, elPosition = Point x y, elOrientation} =
-  case elSymbol of
-    Resistor -> renderResistor x y elOrientation
-    Capacitor -> renderCapacitor x y elOrientation
-    Inductor -> renderInductor x y elOrientation
+renderElement el =
+  let baseSymbol = symbolOf (elSymbol el)
+      transformedSymbol = applyElementTransform el baseSymbol
+      leads = renderLeads el
+   in leads ++ [transformedSymbol]
 
+-- ============================================================
+-- 5. Gesamtschaltplan rendern
+-- ============================================================
 
-renderElectrical :: Electrical -> [(Shape, Stroke, Maybe Fill)]
-renderElectrical (Electrical elems wires) =
-  concatMap renderElement elems ++ concatMap renderWire wires
-
-renderResistor :: Double -> Double -> Orientation -> [(Shape, Stroke, Maybe Fill)]
-renderResistor x y _ =
-  [ ( SLine (Point x y) (Point(x+20) y)
-    , defaultStroke 
-    , Nothing
-    )
-  ]
-
-renderCapacitor :: Double -> Double -> Orientation -> [(Shape, Stroke, Maybe Fill)]
-renderCapacitor x y _ =
-  [ (SLine (Point x y) (Point (x+20) y)
-     , defaultStroke
-     , Nothing
-    )
-  ]
-
-renderInductor :: Double -> Double -> Orientation -> [(Shape, Stroke, Maybe Fill)]
-renderInductor x y _ =
-  [ (SLine (Point x y) (Point (x+20) y)
-    , defaultStroke
-    , Nothing
-    )
-  ]
-  
-renderWire :: Wire -> [(Shape, Stroke, Maybe Fill)]
-renderWire Wire {wStart = Point x1 y1, wEnd = Point x2 y2} =
-  [ (SLine (Point x1 y1) (Point x2 y2) 
-    , defaultStroke
-    , Nothing
-    )
-  ]
-
-
-toSvgDoc :: Double -> Double -> Electrical -> SvgDoc
-toSvgDoc w h electrical = 
-  SvgDoc w h (renderElectrical electrical)
-
-
+renderElectrical :: ElectricalDiagram -> [(Shape, Stroke, Maybe Fill)]
+renderElectrical (ElectricalDiagram elements wires) =
+  concatMap renderElement elements
+    ++ concatMap renderWire wires

@@ -1,12 +1,13 @@
 module TechDraw.Core.Path
-  ( path
-  , moveTo
-  , lineTo
-  , closePath
-  ) where
+  ( path,
+    moveTo,
+    lineTo,
+    closePath,
+  )
+where
 
 import TechDraw.Core.Types
-
+import TechDraw.Core.Vec
 
 -- | Erzeugt eine Shape aus einer Liste von Path-Kommandos.
 path :: [PathCmd] -> Shape
@@ -24,3 +25,5 @@ lineTo x y = L (Point x y)
 closePath :: PathCmd
 closePath = Z
 
+simplifyPath :: [Vec] -> [Vec]
+simplifyPath = id
